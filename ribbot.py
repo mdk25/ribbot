@@ -1,12 +1,10 @@
-from cogs import queue
-from cogs import song
-from cogs import user
-
 import discord
 from discord.ext import commands
 from discord.ext.commands import CommandNotFound
 import os
 import pymongo
+
+from cogs import queue, song, user
 
 ##### Configuration #####
 prefix = "!"
