@@ -25,13 +25,13 @@ class User(commands.Cog):
             return
         text = f"Here's what I know about {member.mention}, zzrrbbitt!\n"
         if "name" in user:
-            text += f"Name: {user['name']}\n"
+            text += f"**Name:** {user['name']}\n"
         if "island" in user:
-            text += f"Island: {user['island']}\n"
+            text += f"**Island:** {user['island']}\n"
         if "friend_code" in user:
-            text += f"Friend Code: {user['friend_code']}\n"
+            text += f"**Friend Code:** {user['friend_code']}\n"
         if "songs" in user:
-            text += f"Song List: {', '.join(user['songs'])}\n"
+            text += f"**Song List:** {', '.join(user['songs'])}\n"
         await ctx.send(text)
 
     @commands.command(pass_context = True)
@@ -41,7 +41,7 @@ class User(commands.Cog):
         await ctx.message.delete()
         name = name.replace("@", "@\N{zero width space}")
         self.db["users"].update({"_id": ctx.message.author.id}, {"$set": {"name": name, "display_name": ctx.message.author.display_name}}, True)
-        await ctx.send(f"Updated name for {ctx.message.author.mention} to: {name}")
+        await ctx.send(f"Updated name for {ctx.message.author.mention} to: **{name}**")
 
     @commands.command(pass_context = True)
     async def setisland(self, ctx, *, island):
@@ -50,7 +50,7 @@ class User(commands.Cog):
         await ctx.message.delete()
         island = island.replace("@", "@\N{zero width space}")
         self.db["users"].update({"_id": ctx.message.author.id}, {"$set": {"island": island, "display_name": ctx.message.author.display_name}}, True)
-        await ctx.send(f"Updated island for {ctx.message.author.mention} to: {island}")
+        await ctx.send(f"Updated island for {ctx.message.author.mention} to: **{island}**")
 
     @commands.command(pass_context = True)
     async def setfriendcode(self, ctx, friend_code):
@@ -59,4 +59,4 @@ class User(commands.Cog):
         await ctx.message.delete()
         friend_code = friend_code.replace("@", "@\N{zero width space}")
         self.db["users"].update({"_id": ctx.message.author.id}, {"$set": {"friend_code": friend_code, "display_name": ctx.message.author.display_name}}, True)
-        await ctx.send(f"Updated friend code for {ctx.message.author.mention} to: {friend_code}")
+        await ctx.send(f"Updated friend code for {ctx.message.author.mention} to: **{friend_code}**")

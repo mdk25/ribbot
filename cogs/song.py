@@ -63,8 +63,8 @@ class Song(commands.Cog):
             else:
                 users_with_song.append(user["display_name"])
 
-        text = f"Have :musical_note: {song}: {', '.join(users_with_song)}\n"
-        text += f"Need :musical_note: {song}: {', '.join(users_without_song)}"
+        text = f"Have :musical_note: **{song}**: {', '.join(users_with_song)}\n"
+        text += f"Need :musical_note: **{song}**: {', '.join(users_without_song)}"
         await ctx.send(text)
 
     @commands.command(pass_context = True)
@@ -86,6 +86,6 @@ class Song(commands.Cog):
         user_song = next((s for s in user_songs if s not in partner_songs), None)
         partner_song = next((s for s in partner_songs if s not in user_songs), None)
         if user_song and partner_song:
-            await ctx.send(f"{ctx.message.author.mention} needs :musical_note: {partner_song} and {member.mention} needs :musical_note: {user_song}, zzrrbbitt!")
+            await ctx.send(f"{ctx.message.author.mention} needs :musical_note: **{partner_song}** and {member.mention} needs :musical_note: **{user_song}**, zzrrbbitt!")
         else:
             await ctx.send("No valid trade can be made, zzrrbbitt!")
