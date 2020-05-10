@@ -4,6 +4,8 @@ import pymongo
 
 class Song(commands.Cog):
 
+    untradeable = {"Animal City", "Drivin'", "Farewell"}
+
     def __init__(self, bot, db):
         self.bot = bot
         self.db = db
@@ -22,6 +24,24 @@ class Song(commands.Cog):
             if song_name:
                 song_list.append(song_name)
         return song_list
+
+    @commands.command(pass_context = True)
+    async def songlist(self, ctx, member: discord.Member = None):
+        """View your song list
+        (ex. !songlist)
+        View someone's song list
+        (ex. !songlist @Ribbot)"""
+        await ctx.message.delete()
+        if not member:
+            member = ctx.message.author
+        user = self.db["users"].find_one({"_id": member.id})
+        if not user:
+            await ctx.send("I don't know who that is, zzrrbbitt!")
+            return
+        if "songs" in user:
+            await ctx.send(f"Song list for {member.mention}: {', '.join(user['songs'])}")
+        else:
+            await ctx.send(f"{member.mention} doesn't have any songs yet, zzrrbbitt!")
 
     @commands.command(pass_context = True)
     async def addsongs(self, ctx, *, songs):
@@ -83,8 +103,8 @@ class Song(commands.Cog):
 
         user_songs = set(user["songs"])
         partner_songs = set(partner["songs"])
-        user_song = next((s for s in user_songs if s not in partner_songs), None)
-        partner_song = next((s for s in partner_songs if s not in user_songs), None)
+        user_song = next((s for s in user_songs if s not in partner_songs and s not in Song.untradeable), None)
+        partner_song = next((s for s in partner_songs if s not in user_songs and s not in Song.untradeable), None)
         if user_song and partner_song:
             await ctx.send(f"{ctx.message.author.mention} needs :musical_note: **{partner_song}** and {member.mention} needs :musical_note: **{user_song}**, zzrrbbitt!")
         else:

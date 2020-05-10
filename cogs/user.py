@@ -31,7 +31,7 @@ class User(commands.Cog):
         if "friend_code" in user:
             text += f"**Friend Code:** {user['friend_code']}\n"
         if "songs" in user:
-            text += f"**Song List:** {', '.join(user['songs'])}\n"
+            text += f"**Songs:** {len(user['songs'])}\n"
         await ctx.send(text)
 
     @commands.command(pass_context = True)
