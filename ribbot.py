@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import CommandNotFound
+from discord.ext.commands import CommandNotFound, MissingRequiredArgument
 import os
 import pymongo
 
@@ -34,6 +34,10 @@ async def on_ready():
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
+        await ctx.send(f"{ctx.invoked_with} isn't a command, zzrrbbitt! Check the list with: !help")
+        return
+    if isinstance(error, MissingRequiredArgument):
+        await ctx.send(f"{ctx.invoked_with} is missing arguments, zzrrbbitt! Check how to use it with: !help {ctx.invoked_with}")
         return
     raise error
 
