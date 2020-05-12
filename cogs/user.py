@@ -88,9 +88,9 @@ class User(commands.Cog):
         await ctx.send(f"Updated Nookazon profile for {ctx.message.author.mention} to: **{nookazon_profile}**")
 
     @commands.command(pass_context = True)
-    async def setnotes(self, ctx, notes):
+    async def setnotes(self, ctx, *, notes):
         """Set notes on your profile
-        (ex. !setnotes )"""
+        (ex. !setnotes I might be a robot, but I'm still a frog, zzrrbbitt!)"""
         await ctx.message.delete()
         notes = notes.replace("@", "@\N{zero width space}")
         self.db["users"].update({"_id": ctx.message.author.id}, {"$set": {"notes": notes, "display_name": ctx.message.author.display_name}}, True)
