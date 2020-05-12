@@ -4,7 +4,7 @@ import pymongo
 
 class Song(commands.Cog):
 
-    untradeable = {"Animal City", "Drivin'", "Farewell"}
+    untradeable = {"Animal City", "Drivin'", "Farewell", "K.K. Birthday"}
 
     def __init__(self, bot, db):
         self.bot = bot
@@ -78,10 +78,12 @@ class Song(commands.Cog):
         users_without_song = []
         users = self.db["users"].find()
         for user in users:
-            if "songs" not in user or song not in user["songs"]:
-                users_without_song.append(user["display_name"])
-            else:
+            if "songs" not in user or not user["songs"]:
+                continue
+            if song in user["songs"]:
                 users_with_song.append(user["display_name"])
+            else:
+                users_without_song.append(user["display_name"])
 
         text = f"Have :musical_note: **{song}**: {', '.join(users_with_song)}\n"
         text += f"Need :musical_note: **{song}**: {', '.join(users_without_song)}"
