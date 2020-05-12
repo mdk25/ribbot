@@ -39,11 +39,11 @@ class Song(commands.Cog):
             await ctx.send("I don't know who that is, zzrrbbitt!")
             return
         if "songs" in user:
-            await ctx.send(f"Song list for {member.mention}: {', '.join(user['songs'])}")
+            await ctx.send(f"Song list for {member.mention}: {', '.join(user['songs'].sort())}")
         else:
             await ctx.send(f"{member.mention} doesn't have any songs yet, zzrrbbitt!")
 
-    @commands.command(pass_context = True)
+    @commands.command(pass_context = True, aliases = ['addsong'])
     async def addsongs(self, ctx, *, songs):
         """Add to the K.K. songs you own
         Comma separated, ignores case/spaces/punctuation
