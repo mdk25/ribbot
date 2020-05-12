@@ -1,6 +1,8 @@
+from datetime import datetime
 import discord
 from discord.ext import commands
 import pymongo
+import pytz
 
 class User(commands.Cog):
 
@@ -32,10 +34,13 @@ class User(commands.Cog):
             text += f"**Island:** {user['island']}\n"
         if "friend_code" in user:
             text += f"**Friend Code:** {user['friend_code']}\n"
+        if "timezone" in user:
+            tz = pytz.timezone(user["timezone"])
+            text += f"**Time Zone:** {user['timezone']} ({datetime.now(tz).strftime('%b %d %I:%M %p')})\n"
         if "stalks" in user:
             text += f"**Stalks.io Username:** {user['stalks']}\n"
         if "nookazon" in user:
-            text += f"**Nookazon Profile:** {user['nookazon']}\n"
+            text += f"**Nookazon Profile:** <{user['nookazon']}>\n"
         if "songs" in user:
             text += f"**Songs:** {len(user['songs'])}\n"
         if "notes" in user:
@@ -68,6 +73,18 @@ class User(commands.Cog):
         friend_code = friend_code.replace("@", "@\N{zero width space}")
         self.db["users"].update({"_id": ctx.message.author.id}, {"$set": {"friend_code": friend_code, "display_name": ctx.message.author.display_name}}, True)
         await ctx.send(f"Updated friend code for {ctx.message.author.mention} to: **{friend_code}**")
+
+    @commands.command(pass_context = True)
+    async def settimezone(self, ctx, timezone):
+        """Set your time zone
+        Use a time zone from the 'TZ database name' column in this table: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+        (ex. !settimezone America/New_York)"""
+        await ctx.message.delete()
+        if timezone not in pytz.all_timezones:
+            await ctx.send("That isn't a valid time zone, zzrrbbitt!")
+            return
+        self.db["users"].update({"_id": ctx.message.author.id}, {"$set": {"timezone": timezone, "display_name": ctx.message.author.display_name}}, True)
+        await ctx.send(f"Updated time zone for {ctx.message.author.mention} to: **{timezone}**")
 
     @commands.command(pass_context = True)
     async def setstalks(self, ctx, stalks_username):
