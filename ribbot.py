@@ -34,7 +34,8 @@ async def on_ready():
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
-        await ctx.send(f"{ctx.invoked_with} isn't a command, zzrrbbitt! Check the list with: !help")
+        if ctx.invoked_with[0].isalpha():
+            await ctx.send(f"{ctx.invoked_with} isn't a command, zzrrbbitt! Check the list with: !help")
         return
     if isinstance(error, MissingRequiredArgument):
         await ctx.send(f"{ctx.invoked_with} is missing arguments, zzrrbbitt! Check how to use it with: !help {ctx.invoked_with}")
