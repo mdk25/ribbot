@@ -4,7 +4,7 @@ from discord.ext.commands import CommandNotFound, MissingRequiredArgument
 import os
 import pymongo
 
-from cogs import queue, song, user
+from cogs import queue, song, user, villager
 
 ##### Configuration #####
 prefix = "!"
@@ -45,4 +45,5 @@ async def on_command_error(ctx, error):
 bot.add_cog(queue.Queue(bot, is_approved))
 bot.add_cog(song.Song(bot, db))
 bot.add_cog(user.User(bot, db))
+bot.add_cog(villager.Villager(bot, db))
 bot.run(token)
