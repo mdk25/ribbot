@@ -112,3 +112,28 @@ class Song(commands.Cog):
             await ctx.send(f"{ctx.message.author.mention} needs :musical_note: **{partner_song}** and {member.mention} needs :musical_note: **{user_song}**, zzrrbbitt!")
         else:
             await ctx.send("No valid trade can be made, zzrrbbitt!")
+
+    @commands.command(pass_context = True)
+    async def songgift(self, ctx, member: discord.Member):
+        """Gift a song to someone else
+        (ex. !songgift @Ribbot)"""
+        await ctx.message.delete()
+        user = self.db["users"].find_one({"_id": ctx.message.author.id})
+        partner = self.db["users"].find_one({"_id": member.id})
+        if not user or not partner:
+            await ctx.send("I don't know who that is, zzrrbbitt!")
+            return
+        if "songs" not in user:
+            await ctx.send("No songs found to gift, zzrrbbitt!")
+            return
+        if "songs" not in partner:
+            await ctx.send("I don't know what songs they have, zzrrbbitt!")
+            return
+
+        user_songs = set(user["songs"])
+        partner_songs = set(partner["songs"])
+        user_song = next((s for s in user_songs if s not in partner_songs and s not in Song.untradeable), None)
+        if user_song:
+            await ctx.send(f"{member.mention} needs :musical_note: **{user_song}**, zzrrbbitt!")
+        else:
+            await ctx.send("No songs found to gift, zzrrbbitt!")
