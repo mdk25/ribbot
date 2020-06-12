@@ -44,6 +44,30 @@ class Song(commands.Cog):
         else:
             await ctx.send(f"{member.mention} doesn't have any songs yet, zzrrbbitt!")
 
+    @commands.command(pass_context = True)
+    async def missingsongs(self, ctx, member: discord.Member = None):
+        """View songs missing from your list
+        (ex. !missingsongs)
+        View songs missing from someone's list
+        (ex. !missingsongs @Ribbot)"""
+        await ctx.message.delete()
+        if not member:
+            member = ctx.message.author
+        user = self.db["users"].find_one({"_id": member.id})
+        if not user:
+            await ctx.send("I don't know who that is, zzrrbbitt!")
+            return
+        if "songs" in user and user["songs"]:
+            user_songs = set(user["songs"])
+            all_songs = self.db["songs"].find()
+            missing = (s["name"] for s in all_songs if s["name"] not in user_songs)
+            if missing:
+                await ctx.send(f"Missing songs for {member.mention}: {', '.join(missing)}")
+            else:
+                await ctx.send(f"{member.mention} has every song, zzrrbbitt!")
+        else:
+            await ctx.send(f"{member.mention} doesn't have any songs yet, zzrrbbitt!")
+
     @commands.command(pass_context = True, aliases = ["addsong"])
     async def addsongs(self, ctx, *, songs):
         """Add to the K.K. songs you own
