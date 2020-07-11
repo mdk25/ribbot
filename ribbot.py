@@ -13,7 +13,7 @@ approved_roles = ["Admin", "admin"]
 
 bot = commands.Bot(command_prefix = prefix, case_insensitive = True)
 token = os.environ.get("DISCORD_TOKEN")
-client = pymongo.MongoClient(os.environ.get("MONGODB_URI") + "?retryWrites=false")
+client = pymongo.MongoClient(os.environ.get("MONGODB_URI"))
 db = client[os.environ.get("MONGODB_DATABASE")]
 
 def is_approved(ctx):
